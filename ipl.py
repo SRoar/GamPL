@@ -137,7 +137,7 @@ def createTeamLists(individual_test):
     over_arch_list.append(list_team1)
     over_arch_list.append(list_team2)
 
-    print(over_arch_list)
+    # print(over_arch_list)
 
 # ground_t_l = l.tolist()[-1]
 
@@ -328,7 +328,40 @@ print(testArr)
 print(len(testArr))
 
 
+# user_input = np.concatenate(testArr).astype(float)   # replace with actual feature values matching model input shape
 
-# print(team1_list['rookie'])
+# print(user_input.shape) 
+# # Scale the user input just like training data
+# user_input_scaled = scaler.transform(user_input.reshape(1, -1))
+
+# # Predict single example
+# prediction = model.predict(user_input_scaled)
+
+# print("Predicted winner:", prediction[0])
+
+
+user_input = np.concatenate(testArr).astype(float)
+expected_features = X.shape[1]  # features the model was trained on
+current_features = user_input.shape[0]
+
+if current_features < expected_features:
+    # Pad with zeros
+    padding = np.zeros(expected_features - current_features)
+    user_input = np.concatenate([user_input, padding])
+
+user_input = user_input.reshape(1, -1)
+user_input_scaled = scaler.transform(user_input)
+
+prediction = model.predict(user_input_scaled)
+
+y_pred = model.predict(X_test)
+acc = accuracy_score(y_test, y_pred)
+
+print(f"Test Accuracy: {acc:.2f}")
+
+print("Predicted winner:", prediction[0])
+
+
+
 
 
